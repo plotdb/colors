@@ -55,6 +55,7 @@ colors = {
 for (k in codes) {
   v = codes[k];
   String.prototype.__defineGetter__(k, fn$(v));
+  colors[k] = fn1$(k);
 }
 module.exports = colors;
 function fn$(v){
@@ -64,5 +65,10 @@ function fn$(v){
     } else {
       return this + "";
     }
+  };
+}
+function fn1$(k){
+  return function(it){
+    return ("" + it)[k];
   };
 }

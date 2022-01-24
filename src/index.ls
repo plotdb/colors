@@ -52,5 +52,6 @@ for k,v of codes =>
     k,
     ((v)->->if colors.enabled => "\u001b[#{v.0}m#{@}\u001b[#{v.1}m" else "#{@}")(v)
   )
+  colors[k] = ((k)->->("" + it)[k])(k)
 
 module.exports = colors
