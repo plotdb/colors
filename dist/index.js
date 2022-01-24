@@ -17,6 +17,7 @@ codes = {
   cyan: [36, 39],
   white: [37, 39],
   gray: [90, 39],
+  grey: [90, 39],
   brightRed: [91, 39],
   brightGreen: [92, 39],
   brightYellow: [93, 39],
