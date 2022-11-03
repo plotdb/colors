@@ -17,7 +17,9 @@ get colors in your node.js console.
     console.log("some text without style / color".bgRed.yellow);
     colors.enable(); /* colored outputs are disabled after this */
     console.log("color is back".bgRed.yellow);
-    colors.red("some red text"); /* recursive invocation not supported yet */
+    colors.red("some red text");
+    colors.green.underline("some red text"); /* recursively */
+    colors.green.underline.red("some red text"); /* will be red. high priority for deeper styles */
  
 
 ## Colors and Styles

@@ -48,11 +48,25 @@ colors =
   disable: -> @enabled = false
   codes: codes
 
+wrap = (v) -> "#{wrap.pre or ''}#v#{wrap.post or ''}"
+
 for k,v of codes =>
   String.prototype.__defineGetter__(
     k,
     ((v)->->if colors.enabled => "\u001b[#{v.0}m#{@}\u001b[#{v.1}m" else "#{@}")(v)
   )
-  colors[k] = ((k)->->("" + it)[k])(k)
+  ((k,v) ->
+    # first access clear wrap stack
+    Object.defineProperty colors, k, do
+      get: ->
+        wrap.pre = wrap.post = ''
+        wrap[k]
+    # successor access stack values in `pre` and `post` member.
+    Object.defineProperty wrap, k, do
+      get: ->
+        wrap.pre = (wrap.pre or '') + "\u001b[#{v.0}m"
+        wrap.post = "\u001b[#{v.1}m" + (wrap.post or '')
+        wrap
+  )(k,v)
 
 module.exports = colors

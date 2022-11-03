@@ -1,4 +1,4 @@
-var codes, colors, k, v;
+var codes, colors, wrap, k, v;
 codes = {
   reset: [0, 0],
   bold: [1, 22],
@@ -53,10 +53,13 @@ colors = {
   },
   codes: codes
 };
+wrap = function(v){
+  return (wrap.pre || '') + "" + v + (wrap.post || '');
+};
 for (k in codes) {
   v = codes[k];
   String.prototype.__defineGetter__(k, fn$(v));
-  colors[k] = fn1$(k);
+  fn1$(k, v);
 }
 module.exports = colors;
 function fn$(v){
@@ -68,8 +71,18 @@ function fn$(v){
     }
   };
 }
-function fn1$(k){
-  return function(it){
-    return ("" + it)[k];
-  };
+function fn1$(k, v){
+  Object.defineProperty(colors, k, {
+    get: function(){
+      wrap.pre = wrap.post = '';
+      return wrap[k];
+    }
+  });
+  return Object.defineProperty(wrap, k, {
+    get: function(){
+      wrap.pre = (wrap.pre || '') + ("\u001b[" + v[0] + "m");
+      wrap.post = ("\u001b[" + v[1] + "m") + (wrap.post || '');
+      return wrap;
+    }
+  });
 }
